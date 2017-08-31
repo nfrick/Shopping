@@ -1,0 +1,98 @@
+﻿@model DataLayer.Item
+
+@{
+    ViewBag.Title = "Editar";
+}
+
+<h2>@ViewBag.Title</h2>
+
+
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        @{
+            var unidade = Model.Produto == null ? "Não sei" : Model.Produto.Unidade;
+        }
+        <h4>Unidade: @unidade</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.ID)
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.ProdutoID, "Produto", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.ProdutoID, null, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.ProdutoID, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.QtdPrevista, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.QtdPrevista, new { htmlAttributes = new { @class = "form-control text-right" } })
+            </div>
+            @Html.ValidationMessageFor(model => model.QtdPrevista, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.QtdReal, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.QtdReal, new { htmlAttributes = new { @class = "form-control text-right", data_bind = "value:QtdReal,valueUpdate:'input'" } })
+                @Html.ValidationMessageFor(model => model.QtdReal, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Preco, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Preco, new { htmlAttributes = new { @class = "form-control text-right", data_bind = "value:Preco,valueUpdate:'input'" } })
+                @Html.ValidationMessageFor(model => model.Preco, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="control-label col-md-2"><strong>Total</strong></div>
+            <div class="col-md-10">
+                <input data-bind="value:valorTotal" disabled class="form-control text-right text-box single-line">
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Marca, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Marca, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Marca, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        @Html.Partial("_ButtonEditSave")
+    </div>
+            }
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+
+    @*
+        Como usar o knockout em EditorFor - comentário 1 da primeira resposta
+        https://stackoverflow.com/questions/16720732/how-to-use-knockouts-data-bind-attribute-in-mvc-helpers-like-html-editorfor
+    *@
+
+    <script src="~/Scripts/knockout-3.4.2.js"></script>
+
+    <script type="text/javascript">
+        function ItemModel() {
+            var self = this;
+            self.QtdReal = ko.observable((@Model.QtdReal).toFixed(2));
+            self.Preco = ko.observable((@Model.Preco).toFixed(2));
+            self.valorTotal = ko.computed(function() {
+                return (self.Preco() * self.QtdReal()).toFixed(2);
+            });
+        }
+
+        ko.applyBindings(new ItemModel());
+
+    </script>
+}

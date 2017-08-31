@@ -1,0 +1,109 @@
+﻿@model IEnumerable<DataLayer.Item>
+
+@{
+    ViewBag.Title = Model.First().Lista.ToString();
+}
+
+<h2>@ViewBag.Title</h2>
+
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+
+    <div class="form-group">
+        <button type="submit" value="Salvar" class="btn btn-success">
+            <span class="glyphicon glyphicon-ok"></span> Salvar
+        </button>
+        <a href="@Url.Action("Create")" class="btn btn-default">
+            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+            Adicionar item
+        </a>
+        <a href="@Url.Action("Index")" class="btn btn-default">
+            <span class="glyphicon glyphicon-share-alt" aria-hidden="true"></span>
+            Retornar
+        </a>
+    </div>
+
+    <table class="table table-bordered table-striped table-hover">
+        <thead>
+            <tr>
+                <th class="col-sm-5">
+                    @Html.DisplayNameFor(model => model.Produto.Nome)
+                </th>
+                <th class="col-sm-1 text-right">
+                    @Html.DisplayNameFor(model => model.QtdPrevista)
+                </th>
+                <th class="col-sm-1 text-right">
+                    @Html.DisplayNameFor(model => model.QtdReal)
+                </th>
+                <th class="col-sm-1 text-right">
+                    @Html.DisplayNameFor(model => model.Preco)
+                </th>
+                <th class="col-sm-1 text-right">
+                    @Html.DisplayNameFor(model => model.Subtotal)
+                </th>
+                <th class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.Marca)
+                </th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @Html.EditorFor(model => Model)
+        <tr>
+            <td class="text-center"><strong><input value="T  O  T  A  L" disabled class="form-control text-right" style="border: 0; background: transparent" /></strong></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="text-right">
+                <strong><input value="@($"{Model.Sum(p => p.Subtotal ?? 0):C2}")" disabled class="form-control text-right" style="border: 0; background: transparent"></strong>
+            </td>
+            <td></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div class="form-group">
+        <button type="submit" value="Salvar" class="btn btn-success">
+            <span class="glyphicon glyphicon-ok"></span> Salvar
+        </button>
+        <a href="@Url.Action("Index")" class="btn btn-default">
+            <span class="glyphicon glyphicon-share-alt" aria-hidden="true"></span>
+            Retornar
+        </a>
+    </div>
+}
+
+@section Scripts {
+  
+@Scripts.Render("~/bundles/jqueryval")
+
+    <script type="text/javascript">
+        $("tbody tr:even").css("background-color", "#ddd");
+        $("tbody tr:odd").css("background-color", "#aaa");
+    </script>
+    
+    <script type="text/javascript">
+        $.validator.addMethod("checkForDuplicate", function (value, element) {
+            var textValues = [],
+                //initially mark as valid state
+                valid = true;
+            $("select.checkForDuplicate").each(function () {
+                if ($(this).val() !== "") {
+                    var doesExist = ($.inArray($(this).val(), textValues) === -1) ? false : true;
+                    if (doesExist === false) {
+                        console.log("adding the values to array");
+                        textValues.push($(this).val());
+                        console.log(textValues);
+                    } else {
+                        console.log(textValues);
+                        //update the state as invalid
+                        valid = false;
+                        return valid;
+                    }
+                }
+            });
+            //return the valid state
+            return valid;
+        }, "Duplicado!");
+    </script>
+}

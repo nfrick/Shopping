@@ -1,0 +1,536 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="ShoppingEFModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="tblCategorias">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Categoria" Type="nvarchar" MaxLength="30" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tblItens">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ListaID" Type="int" Nullable="false" />
+          <Property Name="ProdutoID" Type="int" Nullable="false" />
+          <Property Name="QtdPrevista" Type="decimal" Precision="7" Scale="3" />
+          <Property Name="QtdReal" Type="decimal" Precision="7" Scale="3" />
+          <Property Name="Marca" Type="nvarchar" MaxLength="20" />
+          <Property Name="Preco" Type="smallmoney" />
+        </EntityType>
+        <EntityType Name="tblListas">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Data" Type="smalldatetime" Nullable="false" />
+          <Property Name="Descricao" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="LojaID" Type="int" Nullable="false" />
+          <Property Name="Aberta" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tblLojas">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Loja" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Latitude" Type="decimal" Precision="12" Scale="9" />
+          <Property Name="Longitude" Type="decimal" Precision="12" Scale="9" />
+        </EntityType>
+        <EntityType Name="tblMapas">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="LojaID" Type="int" Nullable="false" />
+          <Property Name="Corredor" Type="int" Nullable="false" />
+          <Property Name="Descricao" Type="nvarchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tblProdutoMapa">
+          <Key>
+            <PropertyRef Name="ProdutoID" />
+            <PropertyRef Name="MapaID" />
+          </Key>
+          <Property Name="ProdutoID" Type="int" Nullable="false" />
+          <Property Name="MapaID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tblProdutos">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CategoriaID" Type="int" Nullable="false" />
+          <Property Name="Produto" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Unidade" Type="nvarchar" MaxLength="10" />
+          <Property Name="QtdNormal" Type="decimal" Precision="7" Scale="3" />
+          <Property Name="MarcasSim" Type="nvarchar" MaxLength="100" />
+          <Property Name="MarcasNao" Type="nvarchar" MaxLength="100" />
+          <Property Name="ListaPadrao" Type="bit" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'Shopping.dbo.vw_ProdutosPicklist' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="vw_ProdutosPicklist">
+          <Key>
+            <PropertyRef Name="ID" />
+            
+            
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="Categoria" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="Produto" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="ListaPadrao" Type="bit" />
+          <Property Name="Unidade" Type="nvarchar" MaxLength="10" />
+          <Property Name="QtdNormal" Type="decimal" Precision="7" Scale="3" />
+        </EntityType>
+        <Association Name="FK_tblItens_tblListas">
+          <End Role="tblListas" Type="Self.tblListas" Multiplicity="1" />
+          <End Role="tblItens" Type="Self.tblItens" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblListas">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="tblItens">
+              <PropertyRef Name="ListaID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblItens_tblProdutos">
+          <End Role="tblProdutos" Type="Self.tblProdutos" Multiplicity="1" />
+          <End Role="tblItens" Type="Self.tblItens" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblProdutos">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="tblItens">
+              <PropertyRef Name="ProdutoID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblListas_tblLojas">
+          <End Role="tblLojas" Type="Self.tblLojas" Multiplicity="1" />
+          <End Role="tblListas" Type="Self.tblListas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblLojas">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="tblListas">
+              <PropertyRef Name="LojaID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblMapas_tblLojas">
+          <End Role="tblLojas" Type="Self.tblLojas" Multiplicity="1" />
+          <End Role="tblMapas" Type="Self.tblMapas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblLojas">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="tblMapas">
+              <PropertyRef Name="LojaID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblProdutoMapa_tblMapas">
+          <End Role="tblMapas" Type="Self.tblMapas" Multiplicity="1" />
+          <End Role="tblProdutoMapa" Type="Self.tblProdutoMapa" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblMapas">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="tblProdutoMapa">
+              <PropertyRef Name="MapaID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblProdutoMapa_tblProdutos">
+          <End Role="tblProdutos" Type="Self.tblProdutos" Multiplicity="1" />
+          <End Role="tblProdutoMapa" Type="Self.tblProdutoMapa" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblProdutos">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="tblProdutoMapa">
+              <PropertyRef Name="ProdutoID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblProdutos_tblCategorias">
+          <End Role="tblCategorias" Type="Self.tblCategorias" Multiplicity="1" />
+          <End Role="tblProdutos" Type="Self.tblProdutos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblCategorias">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="tblProdutos">
+              <PropertyRef Name="CategoriaID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="sp_ProdutosPicklist" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ListaID" Type="int" Mode="In" />
+        </Function>
+        <EntityContainer Name="ShoppingEFModelStoreContainer">
+          <EntitySet Name="tblCategorias" EntityType="Self.tblCategorias" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblItens" EntityType="Self.tblItens" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblListas" EntityType="Self.tblListas" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblLojas" EntityType="Self.tblLojas" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblMapas" EntityType="Self.tblMapas" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblProdutoMapa" EntityType="Self.tblProdutoMapa" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblProdutos" EntityType="Self.tblProdutos" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="vw_ProdutosPicklist" EntityType="Self.vw_ProdutosPicklist" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [vw_ProdutosPicklist].[ID] AS [ID], 
+    [vw_ProdutosPicklist].[Categoria] AS [Categoria], 
+    [vw_ProdutosPicklist].[Produto] AS [Produto], 
+    [vw_ProdutosPicklist].[ListaPadrao] AS [ListaPadrao], 
+    [vw_ProdutosPicklist].[Unidade] AS [Unidade], 
+    [vw_ProdutosPicklist].[QtdNormal] AS [QtdNormal]
+    FROM [dbo].[vw_ProdutosPicklist] AS [vw_ProdutosPicklist]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK_tblItens_tblListas" Association="Self.FK_tblItens_tblListas">
+            <End Role="tblListas" EntitySet="tblListas" />
+            <End Role="tblItens" EntitySet="tblItens" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblItens_tblProdutos" Association="Self.FK_tblItens_tblProdutos">
+            <End Role="tblProdutos" EntitySet="tblProdutos" />
+            <End Role="tblItens" EntitySet="tblItens" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblListas_tblLojas" Association="Self.FK_tblListas_tblLojas">
+            <End Role="tblLojas" EntitySet="tblLojas" />
+            <End Role="tblListas" EntitySet="tblListas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblMapas_tblLojas" Association="Self.FK_tblMapas_tblLojas">
+            <End Role="tblLojas" EntitySet="tblLojas" />
+            <End Role="tblMapas" EntitySet="tblMapas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblProdutoMapa_tblMapas" Association="Self.FK_tblProdutoMapa_tblMapas">
+            <End Role="tblMapas" EntitySet="tblMapas" />
+            <End Role="tblProdutoMapa" EntitySet="tblProdutoMapa" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblProdutoMapa_tblProdutos" Association="Self.FK_tblProdutoMapa_tblProdutos">
+            <End Role="tblProdutos" EntitySet="tblProdutos" />
+            <End Role="tblProdutoMapa" EntitySet="tblProdutoMapa" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblProdutos_tblCategorias" Association="Self.FK_tblProdutos_tblCategorias">
+            <End Role="tblCategorias" EntitySet="tblCategorias" />
+            <End Role="tblProdutos" EntitySet="tblProdutos" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="ShoppingEFModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="ShoppingEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Categorias" EntityType="ShoppingEFModel.Categoria" />
+          <EntitySet Name="Itens" EntityType="ShoppingEFModel.Item" />
+          <EntitySet Name="Listas" EntityType="ShoppingEFModel.Lista" />
+          <EntitySet Name="Lojas" EntityType="ShoppingEFModel.Loja" />
+          <EntitySet Name="Mapas" EntityType="ShoppingEFModel.Mapa" />
+          <EntitySet Name="Produtos" EntityType="ShoppingEFModel.Produto" />
+          <AssociationSet Name="FK_tblProdutos_tblCategorias" Association="ShoppingEFModel.FK_tblProdutos_tblCategorias">
+            <End Role="tblCategorias" EntitySet="Categorias" />
+            <End Role="tblProdutos" EntitySet="Produtos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblItens_tblListas" Association="ShoppingEFModel.FK_tblItens_tblListas">
+            <End Role="tblListas" EntitySet="Listas" />
+            <End Role="tblItens" EntitySet="Itens" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblItens_tblProdutos" Association="ShoppingEFModel.FK_tblItens_tblProdutos">
+            <End Role="tblProdutos" EntitySet="Produtos" />
+            <End Role="tblItens" EntitySet="Itens" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblMapas_tblLojas" Association="ShoppingEFModel.FK_tblMapas_tblLojas">
+            <End Role="tblLojas" EntitySet="Lojas" />
+            <End Role="tblMapas" EntitySet="Mapas" />
+          </AssociationSet>
+          <AssociationSet Name="tblProdutoMapa" Association="ShoppingEFModel.tblProdutoMapa">
+            <End Role="tblMapas" EntitySet="Mapas" />
+            <End Role="tblProdutos" EntitySet="Produtos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblListas_tblLojas" Association="ShoppingEFModel.FK_tblListas_tblLojas">
+            <End Role="Loja" EntitySet="Lojas" />
+            <End Role="Lista" EntitySet="Listas" />
+          </AssociationSet>
+          <EntitySet Name="vw_ProdutosPicklist" EntityType="ShoppingEFModel.ProdutoPicklist" />
+          <FunctionImport Name="ProdutosPicklist" EntitySet="vw_ProdutosPicklist" ReturnType="Collection(ShoppingEFModel.ProdutoPicklist)">
+          <Parameter Name="ListaID" Mode="In" Type="Int32" />
+          </FunctionImport>
+        </EntityContainer>
+        <EntityType Name="Categoria">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nome" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Produtos" Relationship="ShoppingEFModel.FK_tblProdutos_tblCategorias" FromRole="tblCategorias" ToRole="tblProdutos" />
+        </EntityType>
+        <EntityType Name="Item">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ListaID" Type="Int32" Nullable="false" />
+          <Property Name="ProdutoID" Type="Int32" Nullable="false" />
+          <Property Name="QtdPrevista" Type="Decimal" Precision="7" Scale="3" />
+          <Property Name="QtdReal" Type="Decimal" Precision="7" Scale="3" />
+          <Property Name="Marca" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Preco" Type="Decimal" Precision="10" Scale="4" />
+          <NavigationProperty Name="Lista" Relationship="ShoppingEFModel.FK_tblItens_tblListas" FromRole="tblItens" ToRole="tblListas" />
+          <NavigationProperty Name="Produto" Relationship="ShoppingEFModel.FK_tblItens_tblProdutos" FromRole="tblItens" ToRole="tblProdutos" />
+        </EntityType>
+        <EntityType Name="Lista">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Data" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Descricao" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="LojaID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Itens" Relationship="ShoppingEFModel.FK_tblItens_tblListas" FromRole="tblListas" ToRole="tblItens" />
+          <NavigationProperty Name="Loja" Relationship="ShoppingEFModel.FK_tblListas_tblLojas" FromRole="Lista" ToRole="Loja" />
+          <Property Name="Aberta" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Loja">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nome" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Mapas" Relationship="ShoppingEFModel.FK_tblMapas_tblLojas" FromRole="tblLojas" ToRole="tblMapas" />
+          <NavigationProperty Name="Listas" Relationship="ShoppingEFModel.FK_tblListas_tblLojas" FromRole="Loja" ToRole="Lista" />
+          <Property Name="Latitude" Type="Decimal" Precision="12" Scale="9" />
+          <Property Name="Longitude" Type="Decimal" Precision="12" Scale="9" />
+        </EntityType>
+        <EntityType Name="Mapa">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="LojaID" Type="Int32" Nullable="false" />
+          <Property Name="Corredor" Type="Int32" Nullable="false" />
+          <Property Name="Descricao" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Loja" Relationship="ShoppingEFModel.FK_tblMapas_tblLojas" FromRole="tblMapas" ToRole="tblLojas" />
+          <NavigationProperty Name="Produtos" Relationship="ShoppingEFModel.tblProdutoMapa" FromRole="tblMapas" ToRole="tblProdutos" />
+        </EntityType>
+        <EntityType Name="Produto">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CategoriaID" Type="Int32" Nullable="false" />
+          <Property Name="Nome" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Unidade" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="QtdNormal" Type="Decimal" Precision="7" Scale="3" />
+          <Property Name="MarcasSim" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="MarcasNao" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="ListaPadrao" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Categoria" Relationship="ShoppingEFModel.FK_tblProdutos_tblCategorias" FromRole="tblProdutos" ToRole="tblCategorias" />
+          <NavigationProperty Name="Itens" Relationship="ShoppingEFModel.FK_tblItens_tblProdutos" FromRole="tblProdutos" ToRole="tblItens" />
+          <NavigationProperty Name="Mapas" Relationship="ShoppingEFModel.tblProdutoMapa" FromRole="tblProdutos" ToRole="tblMapas" />
+        </EntityType>
+        <Association Name="FK_tblProdutos_tblCategorias">
+          <End Type="ShoppingEFModel.Categoria" Role="tblCategorias" Multiplicity="1" />
+          <End Type="ShoppingEFModel.Produto" Role="tblProdutos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblCategorias">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="tblProdutos">
+              <PropertyRef Name="CategoriaID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblItens_tblListas">
+          <End Type="ShoppingEFModel.Lista" Role="tblListas" Multiplicity="1" />
+          <End Type="ShoppingEFModel.Item" Role="tblItens" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblListas">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="tblItens">
+              <PropertyRef Name="ListaID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblItens_tblProdutos">
+          <End Type="ShoppingEFModel.Produto" Role="tblProdutos" Multiplicity="1" />
+          <End Type="ShoppingEFModel.Item" Role="tblItens" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblProdutos">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="tblItens">
+              <PropertyRef Name="ProdutoID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblMapas_tblLojas">
+          <End Type="ShoppingEFModel.Loja" Role="tblLojas" Multiplicity="1" />
+          <End Type="ShoppingEFModel.Mapa" Role="tblMapas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblLojas">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="tblMapas">
+              <PropertyRef Name="LojaID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="tblProdutoMapa">
+          <End Type="ShoppingEFModel.Mapa" Role="tblMapas" Multiplicity="*" />
+          <End Type="ShoppingEFModel.Produto" Role="tblProdutos" Multiplicity="*" />
+        </Association>
+        <Association Name="FK_tblListas_tblLojas">
+          <End Type="ShoppingEFModel.Loja" Role="Loja" Multiplicity="1" />
+          <End Type="ShoppingEFModel.Lista" Role="Lista" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Loja">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Lista">
+              <PropertyRef Name="LojaID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <ComplexType Name="sp_ProdutosPicklist_Result">
+          <Property Type="Int32" Name="ID" Nullable="false" />
+          <Property Type="String" Name="Categoria" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="Produto" Nullable="false" MaxLength="100" />
+          <Property Type="Boolean" Name="ListaPadrao" Nullable="true" />
+          <Property Type="String" Name="Unidade" Nullable="true" MaxLength="10" />
+          <Property Type="Decimal" Name="QtdNormal" Nullable="true" Precision="7" Scale="3" />
+        </ComplexType>
+        <EntityType Name="ProdutoPicklist">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="Categoria" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="Produto" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="ListaPadrao" Type="Boolean" Nullable="false" />
+          <Property Name="Unidade" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="QtdNormal" Type="Decimal" Precision="7" Scale="3" Nullable="true" />
+        </EntityType>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ShoppingEFModelStoreContainer" CdmEntityContainer="ShoppingEntities">
+          <EntitySetMapping Name="Categorias">
+            <EntityTypeMapping TypeName="ShoppingEFModel.Categoria">
+              <MappingFragment StoreEntitySet="tblCategorias">
+                <ScalarProperty Name="Nome" ColumnName="Categoria" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Itens">
+            <EntityTypeMapping TypeName="ShoppingEFModel.Item">
+              <MappingFragment StoreEntitySet="tblItens">
+                <ScalarProperty Name="Preco" ColumnName="Preco" />
+                <ScalarProperty Name="Marca" ColumnName="Marca" />
+                <ScalarProperty Name="QtdReal" ColumnName="QtdReal" />
+                <ScalarProperty Name="QtdPrevista" ColumnName="QtdPrevista" />
+                <ScalarProperty Name="ProdutoID" ColumnName="ProdutoID" />
+                <ScalarProperty Name="ListaID" ColumnName="ListaID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Listas">
+            <EntityTypeMapping TypeName="ShoppingEFModel.Lista">
+              <MappingFragment StoreEntitySet="tblListas">
+                <ScalarProperty Name="Aberta" ColumnName="Aberta" />
+                <ScalarProperty Name="LojaID" ColumnName="LojaID" />
+                <ScalarProperty Name="Descricao" ColumnName="Descricao" />
+                <ScalarProperty Name="Data" ColumnName="Data" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Lojas">
+            <EntityTypeMapping TypeName="ShoppingEFModel.Loja">
+              <MappingFragment StoreEntitySet="tblLojas">
+                <ScalarProperty Name="Longitude" ColumnName="Longitude" />
+                <ScalarProperty Name="Latitude" ColumnName="Latitude" />
+                <ScalarProperty Name="Nome" ColumnName="Loja" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Mapas">
+            <EntityTypeMapping TypeName="ShoppingEFModel.Mapa">
+              <MappingFragment StoreEntitySet="tblMapas">
+                <ScalarProperty Name="Descricao" ColumnName="Descricao" />
+                <ScalarProperty Name="Corredor" ColumnName="Corredor" />
+                <ScalarProperty Name="LojaID" ColumnName="LojaID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Produtos">
+            <EntityTypeMapping TypeName="ShoppingEFModel.Produto">
+              <MappingFragment StoreEntitySet="tblProdutos">
+                <ScalarProperty Name="ListaPadrao" ColumnName="ListaPadrao" />
+                <ScalarProperty Name="MarcasNao" ColumnName="MarcasNao" />
+                <ScalarProperty Name="MarcasSim" ColumnName="MarcasSim" />
+                <ScalarProperty Name="QtdNormal" ColumnName="QtdNormal" />
+                <ScalarProperty Name="Unidade" ColumnName="Unidade" />
+                <ScalarProperty Name="Nome" ColumnName="Produto" />
+                <ScalarProperty Name="CategoriaID" ColumnName="CategoriaID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="tblProdutoMapa" TypeName="ShoppingEFModel.tblProdutoMapa" StoreEntitySet="tblProdutoMapa">
+            <EndProperty Name="tblProdutos">
+              <ScalarProperty Name="ID" ColumnName="ProdutoID" />
+            </EndProperty>
+            <EndProperty Name="tblMapas">
+              <ScalarProperty Name="ID" ColumnName="MapaID" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <EntitySetMapping Name="vw_ProdutosPicklist">
+            <EntityTypeMapping TypeName="ShoppingEFModel.ProdutoPicklist">
+              <MappingFragment StoreEntitySet="vw_ProdutosPicklist">
+                <ScalarProperty Name="QtdNormal" ColumnName="QtdNormal" />
+                <ScalarProperty Name="Unidade" ColumnName="Unidade" />
+                <ScalarProperty Name="ListaPadrao" ColumnName="ListaPadrao" />
+                <ScalarProperty Name="Produto" ColumnName="Produto" />
+                <ScalarProperty Name="Categoria" ColumnName="Categoria" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="ProdutosPicklist" FunctionName="ShoppingEFModel.Store.sp_ProdutosPicklist" />
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="False" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

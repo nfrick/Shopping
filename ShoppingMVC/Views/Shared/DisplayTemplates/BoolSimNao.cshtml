@@ -1,0 +1,14 @@
+﻿@model bool?
+
+
+@{
+var boolValue = Model ?? false; ;
+}
+
+@if (boolValue) {
+    <text>Sim</text>
+}
+else {
+    <text>Não</text>
+}
+

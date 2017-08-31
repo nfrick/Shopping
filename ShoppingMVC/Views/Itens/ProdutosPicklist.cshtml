@@ -1,0 +1,207 @@
+@model List<DataLayer.ProdutoPicklist>
+
+@{
+    ViewBag.Title = "Adicionar à Lista";
+}
+
+<style>
+    td.padrao {
+        background-color: #FFEEAA;
+        color: black;
+    }
+
+    td.odd {
+        background-color: #BBBBBB;
+        color: black;
+    }
+
+    td.even {
+        background-color: #888888;
+        color: black;
+    }
+
+    tr.categoria {
+        background-color: #444444;
+        color: white;
+    }
+
+    input[type="checkbox"] {
+        vertical-align: middle;
+    }
+
+    div.nf-imagem {
+    }
+
+    div.nf-produto {
+    }
+
+    div.nf-descricao {
+    }
+
+    div.nf-row {
+    }
+
+    button.nf-button-link {
+        padding: 0
+    }
+</style>
+
+<h2>
+    <img src="~/Images/Icons/shop-cart-add-icon_64.png" alt="Adicionar itens à lista" style="height: 32px" align="left" />
+    @ViewBag.Title
+</h2>
+
+@{
+    var pos = 0;
+    var row = 0;
+    var cat = "zzz";
+}
+
+@using (Html.BeginForm("ProdutosPicklist", "Itens", FormMethod.Get)) {
+    <div class="form-group">
+        <div class="input-group">
+            <span class="input-group-addon"><span class="glyphicon glyphicon-search"></span></span>
+            <input id="produto" type="text" class="form-control" name="produto" placeholder="Nome ou parte do nome do produto">
+            <input type="submit" class="btn btn-primary" value="Procurar">
+        </div>
+    </div>
+}
+
+@using (Html.BeginForm("ProdutosPicklist", "Itens", FormMethod.Post)) {
+    @Html.AntiForgeryToken()
+    <input type="hidden" value="@ViewBag.Selecao" name="selecao"/>
+
+    <div class="form-group">
+        <button type="submit" value="Salvar" class="btn btn-link nf-button-link" name="buttonType" id="btnSalvar" disabled>
+            <span class="glyphicon glyphicon-shopping-cart"></span>
+            Salvar <span class="badge"></span>
+        </button>
+        |
+        @if (ViewBag.Selecao != "Todos") {
+            <button type="submit" value="Todos os produtos" class="btn btn-link nf-button-link" name="buttonType">
+                <span class="glyphicon glyphicon-th"></span>
+                Todos os produtos
+            </button>
+            @:|
+        }
+        @if (ViewBag.Selecao != "Padrao") {
+            <button type="submit" value="Lista Padrão" class="btn btn-link nf-button-link" name="buttonType">
+                <span class="glyphicon glyphicon-star"></span>
+                Lista Padrão
+            </button>
+            @:|
+        }
+        @if (ViewBag.Selecao != "Eventuais") {
+            <button type="submit" value="Eventuais" class="btn btn-link nf-button-link" name="buttonType">
+                <span class="glyphicon glyphicon-star-empty"></span>
+                Eventuais
+            </button>
+            @:|
+        }
+        @if (ViewBag.Selecao == "Todos") {
+            <button type="submit" value="Marcar Lista Padrão" class="btn btn-link nf-button-link" name="buttonType">
+                <span class="glyphicon glyphicon-check"></span>
+                Marcar Lista Padrão
+            </button>
+            @:|
+        }
+        else {
+            <button type="submit" value="Marcar todos" class="btn btn-link nf-button-link" name="buttonType">
+                <span class="glyphicon glyphicon-check"></span>
+                Marcar todos
+            </button>
+            @:|
+        }
+
+        <button type="submit" value="Desmarcar todos" class="btn btn-link nf-button-link" name="buttonType" id="btnDesmarcar" disabled>
+            <span class="glyphicon glyphicon-unchecked"></span>
+            Desmarcar todos
+        </button>
+        |
+        <a href="@Url.Action("Index")" class="btn btn-link nf-button-link" style="padding: 0">
+            <span class="glyphicon glyphicon-share-alt" aria-hidden="true"></span>
+            Retornar
+        </a>
+    </div>
+
+    <div>
+        <div class="row">
+            @for (var i = 0; i < Model.Count; i++) {
+                <div class="col-md-3 nf-produto panel @(Model[i].ListaPadrao ? "panel-primary" : "panel-default")">
+                    @Html.ValidationSummary(true, "", new {@class = "text-danger"})
+                    @Html.HiddenFor(model => Model[i].ID)
+                    @Html.HiddenFor(model => Model[i].ListaPadrao)
+                    @Html.HiddenFor(model => Model[i].Categoria)
+                    @Html.HiddenFor(model => Model[i].Produto)
+                    @Html.HiddenFor(model => Model[i].Unidade)
+                    <div class="panel-heading"><strong>@Model[i].Produto</strong></div>
+                    <div class="row nf-row panel-body">
+                        <div class="col-md-4 nf-imagem">
+                            @Html.Partial("_produtoImagem80", Model[i].Imagem)
+                        </div>
+                        <div class="col-md-8 nf-descricao">
+                            <label for="@Html.NameFor(model => Model[i].Adicionar)">
+                                @Html.CheckBoxFor(model => Model[i].Adicionar,
+                                    new {htmlAttributes = new {@class = "form-control text-right"}})
+                                comprar
+                            </label>
+                            @*@Html.ValidationMessageFor(model => Model[i].Adicionar, "", new {@class = "text-danger"})*@
+                            <div class="input-group">
+                                <span class="input-group-addon">Qtd</span>
+                                @Html.EditorFor(model => Model[i].QtdNormal,
+                                    new {htmlAttributes = new {@class = "form-control col-md-2 text-right"}})
+                                @Html.ValidationMessageFor(model => Model[i].QtdNormal, "", new {@class = "text-danger"})
+                                <span class="input-group-addon">@Model[i].Unidade</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                pos++;
+            }
+        </div>
+    </div>
+
+    <div class="form-group">
+        <button type="submit" value="Salvar" class="btn btn-link nf-button-link" name="buttonType" disabled>
+            <span class="glyphicon glyphicon-shopping-cart"></span>
+            Salvar<span></span>
+        </button>
+        |
+        <a href="@Url.Action("Index")" class="btn btn-link nf-button-link" style="padding: 0">
+            <span class="glyphicon glyphicon-share-alt" aria-hidden="true"></span>
+            Retornar
+        </a>
+    </div>
+}
+
+@section scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <section class="scripts">
+        <script type="text/javascript">
+
+            $(document).ready(function () {
+                SetSalvarLabel();
+            });
+
+            $('input:checkbox').click(function () {
+                SetSalvarLabel();
+            });
+
+            function SetSalvarLabel() {
+                var checked = $('input:checkbox:checked').length;
+                var noItems = checked === 0;
+                var checkedTxt = noItems ? "" : checked; //" (" + checked + ")";
+                var group = $('button[value="Salvar"]');
+
+                group.each(function () {
+                    $(this).prop('disabled', noItems);
+                    $(this).children("span").last().text(checkedTxt);
+                });
+
+                $('#btnDesmarcar').prop('disabled', noItems);
+            }
+
+        </script>
+    </section>
+}

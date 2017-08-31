@@ -1,0 +1,106 @@
+﻿@model IEnumerable<DataLayer.Item>
+
+@{
+    ViewBag.Title = Model.First().Lista.ToString();
+}
+
+<h2>
+    <img src="~/Images/Lista_32.png" alt="@ViewBag.Title" align="left" />
+    @ViewBag.Title
+</h2>
+
+<div class="form-group">
+    <a href="@Url.Action("Close")">
+        <span class="glyphicon glyphicon-folder-close" aria-hidden="true"></span>
+        Fechar lista
+    </a> |
+    <a href="@Url.Action("Create")">
+        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+        Adicionar item
+    </a> |
+    <a href="@Url.Action("ProdutosPicklist")">
+        <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
+        Adicionar vários itens
+    </a> |
+    <a href="@Url.Action("EditMulti")">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+        Editar lista
+    </a>
+</div>
+
+<table class="table table-bordered table-striped table-hover">
+    <thead>
+    <tr>
+        <th class="col-sm-3">
+            @Html.DisplayNameFor(model => model.Produto.Nome)
+        </th>
+        <th class="col-sm-1">
+            @Html.DisplayNameFor(model => model.Produto.Unidade)
+        </th>
+        <th class="col-sm-1 text-right">
+            @Html.DisplayNameFor(model => model.QtdPrevista)
+        </th>
+        <th class="col-sm-1 text-right">
+            @Html.DisplayNameFor(model => model.QtdReal)
+        </th>
+        <th class="col-sm-1 text-right">
+            @Html.DisplayNameFor(model => model.Preco)
+        </th>
+        <th class="col-sm-1 text-right">
+            @Html.DisplayNameFor(model => model.Subtotal)
+        </th>
+        <th class="col-sm-1">
+            @Html.DisplayNameFor(model => model.Marca)
+        </th>
+        <th class="col-sm-3"></th>
+    </tr>
+    </thead>
+    
+    <tbody>
+    @foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Produto.Nome)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Produto.Unidade)
+            </td>
+            <td class="text-right">
+                @Html.DisplayFor(modelItem => item.QtdPrevista)
+            </td>
+            <td class="text-right">
+                @Html.DisplayFor(modelItem => item.QtdReal)
+            </td>
+            <td class="text-right">
+                @Html.DisplayFor(modelItem => item.Preco)
+            </td>
+            <td class="text-right">
+                @Html.DisplayFor(modelItem => item.Subtotal)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Marca)
+            </td>
+            @Html.Partial("_EditDetailsDelete", item.EControl)
+        </tr>
+    }
+    <tr>
+        <td class="text-center"><strong>T  O  T  A  L</strong></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td class="text-right">
+            <strong>@($"{Model.Sum(p => p.Subtotal ?? 0):C2}")</strong>
+        </td>
+        <td></td>
+        <td></td>
+        <td></td>
+    </tr>
+
+    </tbody>
+</table>
+
+@section Scripts {
+    <script>
+        $("tbody tr:even").css("background-color", "#ddd");
+    </script>
+}

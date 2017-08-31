@@ -1,0 +1,132 @@
+﻿@using System.Web.Script.Serialization
+@model List<DataLayer.Loja>
+
+<script src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyDaoBK_M-L7dhklB8ew0z4XpaSESk3NyRQ"></script>
+
+<style>
+    #map_canvas img {
+        max-width: none
+    }
+</style>
+
+@{
+    ViewBag.Title = "Lojas";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<p><a href="@Url.Action("Create")">
+        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+        Nova Loja</a>
+</p> 
+<table class="table">
+    @Html.Hidden("QtdLojas", Model.Count, new { id = "QtdLojas" })
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.First().Nome)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @for (var i = 0; i < Model.Count(); i++) {
+            <tr>
+                @{ var id = $"[{i}]"; }
+                @Html.Hidden(@id + ".Nome", Model[i].Nome, new { id = @id + ".Nome" })
+                @Html.Hidden(@id + ".Latitude", Model[i].Latitude, new { id = @id + ".Latitude" })
+                @Html.Hidden(@id + ".Longitude", Model[i].Longitude, new { id = @id + ".Longitude" })
+                <td>
+                    @Html.DisplayFor(modelItem => Model[i].Nome)
+                </td>
+                @Html.Partial("_EditDetailsDelete", Model[i].EControl)
+            </tr>
+                    }
+    </tbody>
+</table>
+
+
+<div id="map-canvas" style="height: 300px;"></div>
+
+
+@section scripts {
+    <section class="scripts">
+
+        <script type="text/javascript">
+
+            // This code tells the browser to execute the "Initialize" method only when the complete document model has been loaded.
+            $(document).ready(function () {
+                Initialize();
+            });
+
+            // Where all the fun happens
+            function Initialize() {
+
+                // Google has tweaked their interface somewhat - this tells the api to use that new UI
+                google.maps.visualRefresh = true;
+                var latitude = document.getElementById("[0].Latitude").value;
+                var longitude = document.getElementById("[0].Longitude").value;
+                var CentroDoMapa = new google.maps.LatLng(latitude, longitude);
+
+                // These are options that set initial zoom level, where the map is centered globally to start, and the type of map to show
+                var mapOptions = {
+                    zoom: 10,
+                    center: CentroDoMapa,
+                    mapTypeId: google.maps.MapTypeId.G_NORMAL_MAP
+                };
+
+                // This makes the div with id "map_canvas" a google map
+                var map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
+
+
+                var lojas = document.getElementById("QtdLojas").value;
+                var latAvg = 0;
+                var lonAvg = 0;
+
+                for (var i = 0; i < lojas; i++) {
+                    var latitude = document.getElementById("[" + i + "].Latitude").value;
+                    var longitude = document.getElementById("[" + i + "].Longitude").value;
+                    var nome = document.getElementById("[" + i + "].Nome").value;
+                    var marker = new google.maps.Marker({
+                        'position': new google.maps.LatLng(latitude, longitude),
+                        'map': map,
+                        'title': nome
+                    });
+                    // Make the marker-pin blue!
+                    marker.setIcon('http://maps.google.com/mapfiles/ms/icons/blue-dot.png');
+
+                    // put in some information about each json object - in this case, the opening hours.
+                    var infowindow = new google.maps.InfoWindow({
+                        content: "<div class='infoDiv'><h2>" +
+                        nome + "</h2></div>"
+                    });
+
+                    //// finally hook up an "OnClick" listener to the map so it pops up out info-window when the marker-pin is clicked!
+                    google.maps.event.addListener(marker,
+                        'click',
+                        function () {
+                            infowindow.open(map, marker);
+                        });
+
+                    latAvg += parseFloat(latitude);
+                    lonAvg += parseFloat(longitude);
+                }
+
+                var centro = new google.maps.LatLng(latAvg / lojas, lonAvg / lojas);
+                map.center = centro;
+
+                //var marker = new google.maps.Marker({
+                //    position: centro,
+                //    map: map,
+                //    title: 'Centro do Mapa'
+                //});
+
+                // You can make markers different colors...  google it up!
+                //marker.setIcon('http://maps.google.com/mapfiles/ms/icons/red-dot.png');
+            }
+
+
+        </script>
+    </section>
+}

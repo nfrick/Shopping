@@ -1,0 +1,75 @@
+﻿@model DataLayer.Lista
+
+@{
+    ViewBag.Title = "Home Page";
+}
+
+<div class="jumbotron">
+    <div class="row">
+        <div class="col-md-2">
+            <img src="~/Images/Icons/shop-cart-icon_128.png" alt="Shopping" class="img-responsive" />
+        </div>
+        <div class="col-md-10">
+            <h1>SHOPPING</h1>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <div>
+            <img src="~/Images/Produtos_32.png" alt="Produtos" align="left"/>
+            <h2>Produtos</h2>
+        </div>
+        <p>
+            <a class="btn btn-default" href="@Url.Action("Index", "Produtos")">  @*</a>~/Produtos/Index">*@
+                <span class="glyphicon glyphicon-sort-by-alphabet"></span>
+                Ordem alfabética
+            </a>
+            <a class="btn btn-primary" href="@Url.Action("IndexPorCategoria", "Produtos")">
+                <span class="glyphicon glyphicon-th-list"></span>
+                Por categoria
+            </a>
+        </p>
+    </div>
+
+    <div class="col-md-4">
+        <div>
+            <img src="~/Images/Lista_32.png" alt="Listas de Compras" align="left"/>
+            <h2>Listas de Compras</h2>
+        </div>
+        <p>
+            @if (Model == null) {
+                <a class="btn btn-primary" href="@Url.Action("Create", "Listas")">
+                    <span class="glyphicon glyphicon-plus"></span>
+                    Criar Lista
+                </a>
+            }
+            else {
+                <a class="btn btn-primary" href="@Url.Action("Index", "Itens")">
+                    <span class="glyphicon glyphicon-pencil"></span>
+                    @Model.ToString()
+                </a>
+            }
+
+            <a class="btn btn-default" href="@Url.Action("Index", "Listas")">
+                <span class="glyphicon glyphicon-duplicate"></span>
+                Todas as listas
+            </a>
+        </p>
+    </div>
+
+    <div class="col-md-4">
+        <div>
+            <img src="~/Images/Loja_32.png" alt="Produtos" align="left" />
+            <h2>Lojas</h2>
+        </div>
+        <p>
+            <a class="btn btn-primary" href="@Url.Action("Index", "Lojas")">
+                <span class="glyphicon glyphicon-sort-by-alphabet"></span>
+                Ordem alfabética
+            </a>
+        </p>
+
+    </div>
+</div>

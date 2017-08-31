@@ -1,0 +1,114 @@
+﻿@model DataLayer.Produto
+
+@{
+    ViewBag.Title = "Detalhes";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<div>
+    <hr />
+    <div class="row">
+        <div class="col-md-2">
+            @Html.Partial("_ProdutoImagem200", Model.Imagem)
+        </div>
+        <div class="col-md-10">
+            <dl class="dl-horizontal">
+                <dt>
+                    @Html.DisplayNameFor(model => model.Nome)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Nome)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Categoria.Nome)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Categoria.Nome)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Unidade)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Unidade)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.QtdNormal)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.QtdNormal)
+                </dd>
+
+                @if (!Model.MarcasSim.IsEmpty()) {
+                    <dt>
+                        @Html.DisplayNameFor(model => model.MarcasSim)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.MarcasSim)
+                    </dd>
+                }
+
+                @if (!Model.MarcasNao.IsEmpty()) {
+                    <dt>
+                        @Html.DisplayNameFor(model => model.MarcasNao)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.MarcasNao)
+                    </dd>
+                }
+                <dt>
+                    @Html.DisplayNameFor(model => model.ListaPadrao)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.ListaPadrao)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.QtdMedia)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.QtdMedia)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.PrecoMin)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.PrecoMin)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.PrecoMed)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.PrecoMed)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.PrecoMax)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.PrecoMax)
+                </dd>
+            </dl>
+        </div>
+    </div>
+</div>
+
+@Html.Partial("_ButtonDetailsEdit", Model.ID)
+
+@Html.Partial("_Compras", Model.Itens.OrderByDescending(i => i.Lista.Data))
+
+@section Scripts {
+    <script>
+        $("tbody tr:even").css("background-color", "#ddd");
+    </script>
+}

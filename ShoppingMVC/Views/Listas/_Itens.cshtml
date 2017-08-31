@@ -1,0 +1,70 @@
+﻿@model IEnumerable<DataLayer.Item>
+
+@if (Model.Any()) {
+    <table class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th class="col-md-5">
+                    @Html.DisplayNameFor(model => model.Produto.Nome)
+                </th>
+                <th class="col-md-1">
+                    @Html.DisplayNameFor(model => model.Produto.Unidade)
+                </th>
+                <th class="col-md-1 text-right">
+                    @Html.DisplayNameFor(model => model.QtdPrevista)
+                </th>
+                <th class="col-md-1 text-right">
+                    @Html.DisplayNameFor(model => model.QtdReal)
+                </th>
+                <th class="col-md-1 text-right">
+                    @Html.DisplayNameFor(model => model.Preco)
+                </th>
+                <th class="col-md-1 text-right">
+                    @Html.DisplayNameFor(model => model.Subtotal)
+                </th>
+                <th class="col-md-2">
+                    @Html.DisplayNameFor(model => model.Marca)
+                </th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var item in Model) {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Produto.Nome)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Produto.Unidade)
+                    </td>
+                    <td class="text-right">
+                        @Html.DisplayFor(modelItem => item.QtdPrevista)
+                    </td>
+                    <td class="text-right">
+                        @Html.DisplayFor(modelItem => item.QtdReal)
+                    </td>
+                    <td class="text-right">
+                        @Html.DisplayFor(modelItem => item.Preco)
+                    </td>
+                    <td class="text-right">
+                        @Html.DisplayFor(modelItem => item.Subtotal)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Marca)
+                    </td>
+                </tr>
+            }
+            <tr>
+                <td class="text-center"><strong>T  O  T  A  L</strong></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td class="text-right">
+                    <strong>@($"{Model.Sum(p => p.Subtotal ?? 0):C2}")</strong>
+                </td>
+                <td></td>
+                <td></td>
+            </tr>
+        </tbody>
+    </table>
+}

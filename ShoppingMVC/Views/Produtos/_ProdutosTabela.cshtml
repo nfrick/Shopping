@@ -1,0 +1,40 @@
+﻿@model IEnumerable<DataLayer.Produto>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().Nome)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().Unidade)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().ListaPadrao)
+            </th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var item in Model) {
+            <tr>
+                <td>
+                    @Html.Partial("_ProdutoImagem80", item.Imagem)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nome)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Unidade)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ListaPadrao)
+                </td>
+                @Html.Partial("_EditDetailsDelete", item.EControl)
+            </tr>
+        }
+    </tbody>
+</table>

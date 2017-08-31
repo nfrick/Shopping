@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="590a019f38e3484fbdd47491f2af0798" Name="Diagram1">
+        <EntityTypeShape EntityType="ShoppingEFModel.Categoria" Width="1.5" PointX="5.25" PointY="4.75" />
+        <EntityTypeShape EntityType="ShoppingEFModel.Item" Width="1.5" PointX="7.25" PointY="1" />
+        <EntityTypeShape EntityType="ShoppingEFModel.Lista" Width="1.5" PointX="9.25" PointY="1" />
+        <EntityTypeShape EntityType="ShoppingEFModel.Loja" Width="1.5" PointX="1.25" PointY="1" />
+        <EntityTypeShape EntityType="ShoppingEFModel.Mapa" Width="1.5" PointX="3.25" PointY="1" />
+        <EntityTypeShape EntityType="ShoppingEFModel.Produto" Width="1.5" PointX="5.25" PointY="1" />
+        <AssociationConnector Association="ShoppingEFModel.FK_tblProdutos_tblCategorias" />
+        <AssociationConnector Association="ShoppingEFModel.FK_tblItens_tblListas" />
+        <AssociationConnector Association="ShoppingEFModel.FK_tblItens_tblProdutos" />
+        <AssociationConnector Association="ShoppingEFModel.FK_tblMapas_tblLojas" />
+        <AssociationConnector Association="ShoppingEFModel.tblProdutoMapa" />
+        <AssociationConnector Association="ShoppingEFModel.FK_tblListas_tblLojas" />
+        <EntityTypeShape EntityType="ShoppingEFModel.ProdutoPicklist" Width="1.5" PointX="1.25" PointY="3.75" FillColor="255, 255, 128" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

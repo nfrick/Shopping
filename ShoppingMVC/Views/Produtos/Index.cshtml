@@ -1,0 +1,23 @@
+﻿@model IEnumerable<DataLayer.Produto>
+
+@{
+    ViewBag.Title = "Produtos";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<p>
+    <a href="@Url.Action("Create")">
+        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+        Novo Produto</a> | 
+    <a href="@Url.Action("IndexPorCategoria")">
+        <span class="glyphicon glyphicon-th-list"></span>
+        Por categoria</a>
+</p> 
+@Html.Partial("_ProdutosTabela", Model)
+
+@section Scripts {
+    <script>
+        $("tbody tr:even").css("background-color", "#ddd");
+    </script>
+}
