@@ -32,7 +32,6 @@ namespace ShoppingMVC.Controllers {
 
         // GET: Lojas/Create
         public ActionResult Create() {
-            throw new StackOverflowException();
             return View();
         }
 
@@ -43,8 +42,8 @@ namespace ShoppingMVC.Controllers {
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "ID,Nome,Latitude,Longitude")] Loja loja) {
             if (ModelState.IsValid) {
-                db.Lojas.Add(loja);
-                db.SaveChanges();
+                //db.Lojas.Add(loja);
+                //db.SaveChanges();
                 return RedirectToAction("Index");
             }
 

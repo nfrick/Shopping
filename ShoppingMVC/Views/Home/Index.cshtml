@@ -4,13 +4,15 @@
     ViewBag.Title = "Home Page";
 }
 
-<div class="jumbotron">
+<link href="https://fonts.googleapis.com/css?family=Architects+Daughter|Homemade+Apple" rel="stylesheet">
+
+<div class="jumbotron" style="margin-top: 20px">
     <div class="row">
         <div class="col-md-2">
             <img src="~/Images/Icons/shop-cart-icon_128.png" alt="Shopping" class="img-responsive" />
         </div>
         <div class="col-md-10">
-            <h1>SHOPPING</h1>
+            <h1 style="font-family: 'Architects Daughter', cursive; font-family: 'Homemade Apple', cursive;">Shopping List</h1>
         </div>
     </div>
 </div>
@@ -42,7 +44,7 @@
             @if (Model == null) {
                 <a class="btn btn-primary" href="@Url.Action("Create", "Listas")">
                     <span class="glyphicon glyphicon-plus"></span>
-                    Criar Lista
+                    Nova Lista
                 </a>
             }
             else {

@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace DataLayer {
     [MetadataType(typeof(ProdutoMetadata))]
-    [ValidateUniqueProduto(ErrorMessage= "Produto já cadastrada!")]
+    [ValidateUniqueProduto(ErrorMessage= "Produto já cadastrado!")]
     public partial class Produto {
         // Note this class has nothing in it.  It's just here to add the class-level attribute.
         public decimal? QtdMedia => Itens.Average(i => i.QtdReal);

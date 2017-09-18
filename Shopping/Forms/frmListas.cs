@@ -390,7 +390,7 @@ namespace Shopping {
                             frm, row);
                     }
                 }
-                worksheet.Cells.AutoFitColumns(0);  //Autofit columns for all cells
+                worksheet.Cells.AutoFitColumns(0);us  //Autofit columns for all cells
 
                 // lets set the header text 
                 worksheet.HeaderFooter.OddHeader.CenteredText = "&16&\"Segoe UI,Regular Bold\" Lista de Compras";
