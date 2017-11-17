@@ -4,11 +4,10 @@ using System.Data;
 using System.Data.Common;
 using System.Data.OleDb;
 using System.Data.SqlClient;
-using System.IO;
-using System.Linq;
 using System.Windows.Forms;
 
-namespace Shopping {
+namespace Shopping
+{
     public partial class frmConfig : Form {
         private SqlConnectionStringBuilder _sqlConnSb;
         private OleDbConnectionStringBuilder _oleConnSb;
@@ -22,7 +21,6 @@ namespace Shopping {
             foreach (ConnectionStringSettings str in config.ConnectionStrings.ConnectionStrings) {
                 comboBoxStrings.Items.Add(str.Name);
             }
-            textBoxReportPath.Text = config.AppSettings.Settings[@"reportpath"].Value;
             buttonSave.Enabled = false;
         }
 
@@ -60,7 +58,6 @@ namespace Shopping {
                 var connectionStringsSection = (ConnectionStringsSection) config.GetSection("connectionStrings");
                 connectionStringsSection.ConnectionStrings[connName].ConnectionString = textBoxString.Text;
             }
-            config.AppSettings.Settings[@"reportpath"].Value = textBoxReportPath.Text;
             config.Save(ConfigurationSaveMode.Modified);
             ConfigurationManager.RefreshSection("connectionStrings");
             ConfigurationManager.RefreshSection("appSettings");
@@ -79,22 +76,6 @@ namespace Shopping {
                         e.Cancel = true;
                         break;
             }
-        }
-
-        private void buttonReports_Click(object sender, EventArgs e) {
-            FBD.SelectedPath = textBoxReportPath.Text;
-            if (FBD.ShowDialog() != DialogResult.OK || textBoxReportPath.Text == FBD.SelectedPath) return;
-
-            if (Directory.EnumerateFileSystemEntries(FBD.SelectedPath, "*.rdlc").Any())
-                textBoxReportPath.Text = FBD.SelectedPath;
-            else {
-                MessageBox.Show(@"Diretório não contém arquivos de relatório (*.rdlc)",
-                    @"Configuração", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-            }
-        }
-
-        private void textBoxReportPath_TextChanged(object sender, EventArgs e) {
-            buttonSave.Enabled = true;
         }
 
         private void buttonSQLExpress_Click(object sender, EventArgs e) {

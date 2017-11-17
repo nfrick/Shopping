@@ -61,7 +61,7 @@
     <GenerateManifests>true</GenerateManifests>
   </PropertyGroup>
   <PropertyGroup>
-    <SignManifests>true</SignManifests>
+    <SignManifests>false</SignManifests>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="EPPlus, Version=4.1.0.0, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
@@ -241,10 +241,18 @@
     <None Include="Resources\mail-mark-task.png" />
     <None Include="Resources\flour-icon32.png" />
     <None Include="Resources\organization-icon32.png" />
-    <Content Include="Reports\rptListaCompletaMapa.rdlc" />
-    <EmbeddedResource Include="Reports\rptListaCompletaCategoria.rdlc" />
-    <Content Include="Reports\rptListaResumidaCategoria.rdlc" />
-    <Content Include="Reports\rptListaResumidaMapa.rdlc" />
+    <None Include="Reports\rptListaCompletaMapa.rdlc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Reports\rptListaCompletaCategoria.rdlc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Reports\rptListaResumidaCategoria.rdlc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Reports\rptListaResumidaMapa.rdlc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Properties\DataSources\clsLoja.datasource" />
     <None Include="Resources\dialog-ok-apply.png" />
     <None Include="Resources\dialog-cancel.png" />
